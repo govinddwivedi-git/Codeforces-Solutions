@@ -37,9 +37,19 @@ const int N=2e5+5;
 
 
 void solve(){
-    int n;
-    cin >> n;
-    
+    string s;
+    cin >> s;
+    int j=0;
+    string ans ="";
+    for(int i=1;i<s.size();i++) {
+       if(s.substr(i) == s.substr(0,s.size()-i) && 2 * i < s.size()) {
+           cout << "YES" << endl;
+           cout << s.substr(0,s.size()-i) << endl;
+           return;
+       }
+    }
+   
+    cout << "NO" << endl;
 }
 
 
@@ -47,7 +57,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         
         
