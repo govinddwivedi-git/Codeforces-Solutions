@@ -40,19 +40,38 @@ int fun(int a, int b)
 {
     return abs(a - b);
 }
-void solve() {
+void solve()
+{
     int n, k;
     cin >> n >> k;
-    int s = (k * (k - 1) / 2) + ((n + k) * (n + k - 1) / 2);
-    int i = (sqrtl(s));
-    cout << min(fun(i * (i + 1), s), fun((i + 1) * (i + 2), s)) << endl;
+    int c = (k * (k - 1) / 2) + ((n + k) * (n + k - 1) / 2);
+    // int i = (sqrtl(s));
+    // cout << min(fun(i * (i + 1), s), fun((i + 1) * (i + 2), s)) << endl; // This is direct formula
+
+    int s = k;
+    int e = k + n - 1;
+    int ans = 1e18;
+    while (s <= e)
+    {
+        int mid = (s + e) / 2;
+        if ((mid * (mid + 1)) <= c)
+        {
+            s = mid + 1;
+        }
+        else
+        {
+            e = mid - 1;
+        }
+    }
+    s = e;
+    cout << min(abs(s * (s + 1) - c), abs((s + 1) * (s + 2) - c)) << endl;
 }
 
 int32_t main()
 {
     fast
 
-    int t = 1;
+        int t = 1;
     cin >> t;
     while (t--)
     {
