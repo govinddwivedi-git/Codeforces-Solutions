@@ -35,49 +35,10 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-bool check (int pos, int n, string &s) {
-    if (pos < 0 || pos + 3 >= n) return false;
-    return s.substr(pos, 4) == "1100";
-}
-
 
 void solve(){
-    string s;
-    cin >> s;
-    int n = s.size();
-    string x = "1100";
-    int cnt = 0;
-    for (int i = 0; i <= n - 4; i++) {
-        if (check(i,n,s)) cnt++;
-    }
-    int q;
-    cin >> q;
-    while(q--) {
-        int i,v;
-        cin >> i >> v;
-        i--;
-        for (int j = i - 3; j <= i; j++) {
-            if(check(j,n,s)) cnt--;
-        }
-        // if(s.size() < 4){
-        //     cout << "NO" << endl;
-        //     continue;
-        // }
-        s[i] = v + '0';
-        for (int j = i - 3; j <= i; j++) {
-            if (check(j,n,s)) cnt++;
-        }
-        // if(s.find(x) == string::npos){
-        //     cout << "NO" << endl;
-        // }
-        // else{
-        //     cout << "YES" << endl;
-        // }
-
-        cout << (cnt > 0 ? "YES" : "NO") << endl;
-    }
-
-    
+    int n;
+    cin >> n;
     
 }
 
