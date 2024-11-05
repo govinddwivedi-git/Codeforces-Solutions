@@ -39,51 +39,33 @@ const int N=2e5+5;
 void solve(){
     int n;
     cin >> n;
-    int x;
-    cin >> x;
-
-    vec a(n);
+    vec v(n);
     for(int i=0;i<n;i++) {
-        cin >> a[i];
+        cin >> v[i];
     }
-
-    set<int> s(all(a));
-
-    if(s.find(0) == s.end()) {
-        cout << 0 << endl;
-        return;
+    stack<int> st;
+    for(int i=0;i<n;i++) {
+        st.push(v[i]);
     }
+    set<int> s(all(v));
 
-    map<int,int> m;
-    for(auto it : a) {
-        m[it]++;
-    }
-   
-    map<int,int> m1;
-    
-    int c = 0;
-    while (true) {
-        if (s.find(c) != s.end()) {
-            
-            if(m[c] > 1) {
-                m1[c % x] += m[c] - 1;
-            }
-            c++;
-            continue;
+    set<int> ans;
+    for(int i=n;i>=1;i--) {
+        int top = st.top();
+        st.pop();
+
+        if(s.find(top + i) == s.end()) {
+            ans.insert((top + i));
         }
-        
-        int rem = c % x;
-        
-        if (m1[rem] > 0) {
-            m1[rem]--;
-            c++;
-        } 
         else {
-            cout << c << endl;
-            return;
+            ans.insert(top + i-1);
         }
     }
 
+    for(auto it = ans.rbegin(); it != ans.rend(); ++it) {
+        cout << *it << " ";
+    }
+    cout << endl;
 }
 
 
