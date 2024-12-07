@@ -48,27 +48,30 @@ void solve(){
     }
 
     int max = 0;
+    int min = INT_MAX;
+    char min_ch;
     char ch;
     for(int i=0;i<26;i++){
         if(hash[i] >= max){
             max = hash[i];
             ch = i+'a';
         }
-    }
 
-    string ans = "";
-    bool b = true;
-    for(int i=0;i<n;i++){
-        if((hash[s[i]-'a'] >= 1) && (b==true) && (s[i] != ch)) {
-            ans += ch;
-            b = false;
-        }
-        else if(hash[s[i]-'a'] != 0){
-            ans += s[i];
+        if(hash[i] < min && hash[i] > 0){
+            min = hash[i];
+            min_ch = i+'a';
         }
     }
 
-    cout << ans << endl;
+    for (int i = 0; i < n; i++) {
+        if (s[i] == min_ch && s[i] != ch) {
+            s[i] = ch;
+            break;
+           
+        }
+    }
+
+    cout << s << endl;
 }
 
 
