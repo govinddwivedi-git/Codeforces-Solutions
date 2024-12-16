@@ -83,7 +83,7 @@ void solve(){
             }
         }
         else {
-            cout << m + m << endl;
+            cout << 2 * m << endl;
             return;
         }
     }
