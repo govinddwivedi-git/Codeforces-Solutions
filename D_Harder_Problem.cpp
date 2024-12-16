@@ -47,19 +47,16 @@ void solve(){
     cout << v[0] << " ";
     set<int> s;
     s.insert(v[0]);
-    int c = 1;
+    int cnt = 1;
     for(int i = 1;i<n;i++){
         if(s.find(v[i]) == s.end()){
             s.insert(v[i]);
             cout << v[i] << " ";
-            c++;
         }
-        else  break;
-    }
-    int cnt = 1;
-    for(;c<=n;c++){
-        if(s.find(cnt) == s.end()){
+        else {
+            while(s.find(cnt) != s.end()) cnt++;
             cout << cnt << " ";
+            s.insert(cnt);
             cnt++;
         }
     }
