@@ -43,7 +43,53 @@ void solve(){
     for(int i=0;i<n;i++){
         cin >> v[i];
     }
+
+    cout << v[0] << " ";
+    set<int> s;
+    s.insert(v[0]);
+    int c = 1;
+    for(int i = 1;i<n;i++){
+        if(s.find(v[i]) == s.end()){
+            s.insert(v[i]);
+            cout << v[i] << " ";
+            c++;
+        }
+        else  break;
+    }
+    int cnt = 1;
+    for(;c<=n;c++){
+        if(s.find(cnt) == s.end()){
+            cout << cnt << " ";
+            cnt++;
+        }
+    }
+    cout << endl;
+
+    // vec hash(n+1, 0);
+    // int m = n+1;
     
+    // vec ans;
+    // ans.push_back(v[0]);
+    // hash[v[0]]++;
+    // int maxi = 0;
+    // maxi = max(maxi, hash[v[0]]);
+    // for(int i=1;i<n;i++) {
+    //     if(hash[v[i-1]] > hash[v[i]] + 1) {
+    //         if(hash[v[i]] + 1 < maxi) {
+    //             ans[i-1] = v[i];
+    //             hash[v[i]]++;
+    //         }
+    //         else ans[i-1] = m + i;
+    //         hash[v[i-1]]--;
+    //     }
+        
+    //     ans.push_back(v[i]);
+    //     hash[v[i]]++;
+
+    //     maxi = max(maxi, hash[v[i]]);
+        
+    // }
+
 }
 
 
