@@ -1,101 +1,85 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
 class Solution {
-  private:
-    static const long long MOD = 1000000007;
-    long long fastPow(long long base, long long exp) {
-        long long res = 1;
-        while (exp > 0) {
-            if (exp & 1) res = (res * base) % MOD;
-            base = (base * base) % MOD;
-            exp >>= 1;
-        }
-        return res;
-    }
-    long long modInv(long long x) {
-        // Fermat's little theorem for prime MOD
-        return fastPow(x, MOD - 2);
-    }
-  public:
-    int cntSubsets(vector<int> &arr, int l, int r) {
-        int n = arr.size();
-        int mx = n == 0 ? 0 : *max_element(arr.begin(), arr.end());
-        int limit = max(mx + 1, r + 1);
-        vector<long long> freq(limit + 1, 0), missing(limit + 1, 0);
-        for (int x : arr) freq[x]++;
-        // missing[i] = number of j < i with freq[j] == 0
-        for(int i = 1; i <= limit; i++){
-            missing[i] = missing[i - 1] + (freq[i - 1] == 0 ? 1 : 0);
-        }
-        // pre2[i] = product of 2^freq[j] for j < i
-        // pre1[i] = product of (2^freq[j]-1) for j < i
-        vector<long long> pre2(limit + 2, 1), pre1(limit + 2, 1);
-        for(int i = 1; i <= limit; i++){
-            long long p2 = fastPow(2, freq[i - 1]);
-            pre2[i] = (pre2[i - 1] * p2) % MOD;
-            long long p1 = (p2 + MOD - 1) % MOD; // 2^freq[j]-1
-            pre1[i] = (pre1[i - 1] * p1) % MOD;
-        }
-        // inv2[i] = inv of pre2[i], inv1[i] = inv of pre1[i]
-        vector<long long> inv2(limit + 2, 1), inv1(limit + 2, 1);
-        inv2[limit] = modInv(pre2[limit]);
-        inv1[limit] = modInv(pre1[limit]);
-        for(int i = limit - 1; i >= 0; i--){
-            inv2[i] = (inv2[i + 1] * fastPow(2, freq[i])) % MOD;
-            long long p1 = (fastPow(2, freq[i]) + MOD - 1) % MOD;
-            inv1[i] = (inv1[i + 1] * modInv(p1)) % MOD;
-        }
-        auto ways = [&](int m){
-            if(m == 0) {
-                // MEX=0 => pick none from freq[0], so product for i>0 => pre2[limit+1]/pre2[1]
-                return (missing[1] == 1 ? 0LL : (pre2[limit] * inv2[1]) % MOD);
+public:
+    vector<int> dijkstra(int V, vector<vector<pair<int, int>>>& adj, int source) {
+        vector<int> dist(V, INT_MAX);
+        dist[source] = 0;
+    
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        pq.push({0, source});
+    
+        while (!pq.empty()) {
+            int distance = pq.top().first;
+            int u = pq.top().second;
+            pq.pop();
+    
+            for (auto& edge : adj[u]) {
+                int v = edge.first;
+                int weight = edge.second;
+    
+                if (dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                    pq.push({dist[v], v});
+                }
             }
-            if(missing[m] - missing[0] > 0) return 0LL; // some i < m missing
-            // pick >=1 for all i < m => pre1[m]/pre1[0], skip i=m => 1, pick anything for i>m => pre2[limit]/pre2[m+1]
-            long long part1 = (pre1[m] * inv1[0]) % MOD;
-            long long part2 = (pre2[limit] * inv2[m + 1]) % MOD;
-            return (part1 * part2) % MOD;
-        };
-        long long ans = 0;
-        for(int m = l; m <= r; m++){
-            if(m <= limit) ans = (ans + ways(m)) % MOD;
         }
-        return (int)ans;
+    
+        return dist;
+    }
+
+    int dfs(vector<vector<pair<int, int>>>& adj, int node, vector<int>& dp) {
+        if(node == 0) return 0;
+        if(dp[node] != -1) return dp[node];
+        
+        int minMaxWeight = INT_MAX;
+        for(auto& edge : adj[node]) {
+            int nextNode = edge.first;
+            int weight = edge.second;
+            
+            // Get minimum max weight path to node 0
+            int pathWeight = dfs(adj, nextNode, dp);
+            if(pathWeight != INT_MAX) {
+                // Maximum weight in this path is max of current edge and path
+                int maxInPath = max(weight, pathWeight);
+                // Take minimum among all possible paths
+                minMaxWeight = min(minMaxWeight, maxInPath);
+            }
+        }
+        
+        return dp[node] = minMaxWeight;
+    }
+
+    int minMaxWeight(int n, vector<vector<int>>& edges, int threshold) {
+        // Check threshold condition and build graph
+        vector<int> outDegree(n, 0);
+        vector<vector<pair<int, int>>> adj(n);
+        
+        for(auto& e : edges) {
+            outDegree[e[0]]++;
+            if(outDegree[e[0]] > threshold) return -1;
+            adj[e[0]].push_back({e[1], e[2]});
+        }
+        
+        // Check reachability using Dijkstra
+        vector<vector<pair<int, int>>> revAdj(n);
+        for(auto& e : edges) {
+            revAdj[e[1]].push_back({e[0], e[2]});
+        }
+        vector<int> dist = dijkstra(n, revAdj, 0);
+        for(int d : dist) {
+            if(d == INT_MAX) return -1;
+        }
+        
+        // Find minimum maximum weight paths
+        vector<int> dp(n, -1);
+        dp[0] = 0;
+        
+        int result = 0;
+        for(int i = 1; i < n; i++) {
+            int weight = dfs(adj, i, dp);
+            if(weight == INT_MAX) return -1;
+            result = max(result, weight);
+        }
+        
+        return result;
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    cin >> t;
-    cin.ignore();
-    while (t--) {
-        vector<int> arr;
-        string input;
-        getline(cin, input);
-        stringstream ss(input);
-        int number;
-        while (ss >> number) {
-            arr.push_back(number);
-        }
-        int l;
-        cin >> l;
-        cin.ignore();
-        int r;
-        cin >> r;
-        cin.ignore();
-        Solution ob;
-        int ans = ob.cntSubsets(arr, l, r);
-        cout << ans << endl;
-        cout << "~" << endl;
-    }
-    return 0;
-}
-
-// } Driver Code Ends
