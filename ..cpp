@@ -1,85 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 class Solution {
 public:
-    vector<int> dijkstra(int V, vector<vector<pair<int, int>>>& adj, int source) {
-        vector<int> dist(V, INT_MAX);
-        dist[source] = 0;
-    
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-        pq.push({0, source});
-    
-        while (!pq.empty()) {
-            int distance = pq.top().first;
-            int u = pq.top().second;
-            pq.pop();
-    
-            for (auto& edge : adj[u]) {
-                int v = edge.first;
-                int weight = edge.second;
-    
-                if (dist[u] + weight < dist[v]) {
-                    dist[v] = dist[u] + weight;
-                    pq.push({dist[v], v});
+    const int MOD = 1e9 + 7;
+
+    int minMaxSums(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+
+        int n = nums.size();
+
+        vector<vector<long long>> C(n + 1, vector<long long>(k + 1, 0));
+        for(int i = 0; i <= n; ++i){
+            C[i][0] = 1;
+            for(int j = 1; j <= min(i, k); ++j){
+                C[i][j] = (C[i-1][j-1] + C[i-1][j]) % MOD;
+            }
+        }
+        long long sum = 0;
+
+        for(int i = 0; i < n; ++i){
+            for(int j = 1; j <= k; ++j){
+                if(i + 1 >= j){
+                    sum = (sum + (nums[i] * C[i][j-1]) % MOD) % MOD;
+                }
+            }
+            for(int j = 1; j <= k; ++j){
+                if(n - i >= j){
+                    sum = (sum + (nums[i] * C[n-i-1][j-1]) % MOD) % MOD;
                 }
             }
         }
-    
-        return dist;
-    }
 
-    int dfs(vector<vector<pair<int, int>>>& adj, int node, vector<int>& dp) {
-        if(node == 0) return 0;
-        if(dp[node] != -1) return dp[node];
-        
-        int minMaxWeight = INT_MAX;
-        for(auto& edge : adj[node]) {
-            int nextNode = edge.first;
-            int weight = edge.second;
-            
-            // Get minimum max weight path to node 0
-            int pathWeight = dfs(adj, nextNode, dp);
-            if(pathWeight != INT_MAX) {
-                // Maximum weight in this path is max of current edge and path
-                int maxInPath = max(weight, pathWeight);
-                // Take minimum among all possible paths
-                minMaxWeight = min(minMaxWeight, maxInPath);
-            }
-        }
-        
-        return dp[node] = minMaxWeight;
-    }
-
-    int minMaxWeight(int n, vector<vector<int>>& edges, int threshold) {
-        // Check threshold condition and build graph
-        vector<int> outDegree(n, 0);
-        vector<vector<pair<int, int>>> adj(n);
-        
-        for(auto& e : edges) {
-            outDegree[e[0]]++;
-            if(outDegree[e[0]] > threshold) return -1;
-            adj[e[0]].push_back({e[1], e[2]});
-        }
-        
-        // Check reachability using Dijkstra
-        vector<vector<pair<int, int>>> revAdj(n);
-        for(auto& e : edges) {
-            revAdj[e[1]].push_back({e[0], e[2]});
-        }
-        vector<int> dist = dijkstra(n, revAdj, 0);
-        for(int d : dist) {
-            if(d == INT_MAX) return -1;
-        }
-        
-        // Find minimum maximum weight paths
-        vector<int> dp(n, -1);
-        dp[0] = 0;
-        
-        int result = 0;
-        for(int i = 1; i < n; i++) {
-            int weight = dfs(adj, i, dp);
-            if(weight == INT_MAX) return -1;
-            result = max(result, weight);
-        }
-        
-        return result;
+        return sum % MOD;
     }
 };
