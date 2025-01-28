@@ -1,59 +1,126 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long int ll;
+ll id = 0;
+void dfs(ll node, vector<ll> &used, vector<ll> G[], vector<ll> &c)
+{
+    used[node] = 1;
 
-// Macros and constants
-#define pb push_back
-#define endl ("\n")
-#define pi (3.141592653589)
-#define int long long
-#define float double
-#define pb push_back
-#define mp make_pair
-#define ff first
-#define ss second
-#define all(c) c.begin(), c.end()
-#define mini(a, b, c) min(c, min(a, b))
-#define mini2(a, b, c, d) min(d, min(c, min(a, b))) 
-#define rrep(i,s,n) for(int i=n-1;i>=s;i--)
-#define rep(i,n) for(int i=0;i<n;i++)
-#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-#define scin(str) getline(cin, str)
+    c[node] = id;
 
-// Debugging Macros
-#define debug(x) cerr << #x << " = " << x << endl
-#define debug2(x, y) cerr << #x << " = " << x << ", " << #y << " = " << y << endl
-
-// Aliases and Types
-using vec = vector<int>;
-using pii=pair<int,int>;
-using mapi=map<int,int>;
-using si=set<int>;
-
-const int mod = 1e9+7;
-
-// Global Constants
-const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
-const int N=2e5+5;
-
-
-void solve(){
-    int n;
-    cin >> n;
-    
+    for (auto u : G[node])
+    {
+        if (used[u] == 0)
+        {
+            dfs(u, used, G, c);
+        }
+        else
+        {
+        }
+    }
 }
 
+void dfs2(ll node, vector<ll> &used, vector<ll> F2[])
+{
+    used[node] = 1;
+    // cout<<node<<"\n";
 
-int32_t main(){
-    fast
-
-    int t = 1;
-    cin >> t;
-    while(t--){
-        
-        
-        solve();
-
-
+    for (auto u : F2[node])
+    { // RRRRR
+        if (used[u] == 0)
+        {
+            dfs2(u, used, F2);
+        }
     }
+}
+int main()
+{
+
+    ll t;
+    cin >> t;
+    while (t--)
+    {
+        id = 0;
+        vector<pair<int, int>> f, g;
+        ll n, m1, m2;
+        cin >> n >> m1 >> m2;
+        vector<ll> G[n + 1];
+        ll p = 0;
+        vector<ll> F2[n + 1];
+        vector<ll> used(n + 1, 0);
+        vector<ll> c(n + 1, 0);
+        for (ll i = 0; i < m1; i++)
+        {
+            ll x, y;
+            cin >> x >> y;
+            f.push_back({x, y});
+        }
+        for (ll i = 0; i < m2; i++)
+        {
+            ll x, y;
+            cin >> x >> y; // cout<<x<<" "<<y<<"\n";
+            G[x].push_back(y);
+            G[y].push_back(x);
+            g.push_back({x, y});
+        }
+        // Do DFS on Graph G
+        // So you get c[i] == component number of node i in graph G
+        for (int i = 1; i <= n; i++)
+        {
+            if (used[i] == 0)
+            {
+                id++;
+                dfs(i, used, G, c);
+            }
+        }
+        // dfs(1,used,G);
+
+        // now we remove edges from F which should be removed
+        // left over graph will make graph F2;
+        // we will then analyze groups of F2;
+        // which all have same id;
+        for (ll i = 0; i < m1; i++)
+        {
+            ll x = f[i].first;
+            ll y = f[i].second;
+            if (c[x] == c[y])
+            { // cout<<"lol";
+                F2[x].push_back(y);
+                F2[y].push_back(x);
+            }
+            else
+            {
+                p++;
+            }
+        }
+        vector<ll> used2(n + 1, 0);
+        unordered_map<ll, ll> count;
+        // now do DFS on F2; to analyze groups of F2 all having same id;
+        // because all bad edges have been removed;
+        for (int i = 1; i <= n; i++)
+        {
+
+            if (used2[i] == 0)
+            {
+                ll iz = c[i]; // cout<<iz<<"\n";
+                count[iz]++;
+                dfs2(i, used2, F2);
+            }
+        }
+
+        for (ll i = 1; i <= n; i++)
+        {
+            // for each component id; check how many
+            // groups are there for this id in F2;
+            // it is confirmed that all such groups; have same id in them;
+            if (count[i] >= 1)
+            {
+                p = p + count[i] - 1;
+            }
+        }
+        cout << p;
+        cout << "\n";
+    }
+
     return 0;
 }
