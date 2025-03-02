@@ -1,14 +1,7 @@
-#include<bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp> // Common file
-#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
-#include <ext/pb_ds/detail/standard_policies.hpp>
-#include <functional>
-using namespace __gnu_pbds;
+#include <bits/stdc++.h>
 using namespace std;
 
-#define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update> 
 // Macros and constants
-#define pb push_back
 #define endl ("\n")
 #define pi (3.141592653589)
 #define int long long
@@ -34,7 +27,6 @@ using vec = vector<int>;
 using pii=pair<int,int>;
 using mapi=map<int,int>;
 using si=set<int>;
-  
 
 const int mod = 1e9+7;
 
@@ -42,6 +34,38 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
+bool f(const vector<pair<int,int>>& v){
+    for(int i=0; i<v.size(); i++){
+        for(int j=i+1; j<v.size(); j++){
+            int r1=v[i].first, c1=v[i].second;
+            int r2=v[j].first, c2=v[j].second;
+            if(abs(r1-r2)+abs(c1-c2)==1){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void solve(){
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> arr(n, vector<int>(m));
+    map<int, vector<pair<int,int>>> mpp;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            cin >> arr[i][j];
+            mpp[arr[i][j]].push_back({i,j});
+        }
+    }
+    int cnt=0, ans=0;
+    for(auto &it: mpp){
+        int cost = f(it.second) ? 1 : 2;
+        cnt += cost;
+        ans = max(ans, cost);
+    }
+    cout << cnt - ans << endl;
+}
 
 int32_t main(){
     fast
@@ -49,23 +73,11 @@ int32_t main(){
     int t = 1;
     cin >> t;
     while(t--){
-        int n;
-        cin>>n;
-        ordered_set st1;
-        vector<pair<int,int>> vp;
-        for(int i = 0 ; i < n ; i++){
-            int a,b;
-            cin>>a>>b;
-            st1.insert(b);
-            vp.push_back({a,b});
-        }
-        sort(all(vp));
-        int ans = 0;
-        for(int i = 0 ; i < n ; i++){
-            st1.erase(vp[i].second);
-            ans+=st1.order_of_key(vp[i].second+1);
-        }
-        cout<<ans<<endl;
+        
+        
+        solve();
+
+
     }
     return 0;
 }
