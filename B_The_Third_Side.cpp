@@ -34,42 +34,30 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-// Add custom hash for pair<int,int>
-struct PairHash {
-    size_t operator()(const pair<int,int>& p) const {
-        return ( (std::hash<int>()(p.first)) ^ (std::hash<int>()(p.second) << 16) );
-    }
-};
-
-bool f(const vector<pair<int,int>>& v){
-    unordered_set<pair<int,int>, PairHash> st(v.begin(), v.end());
-    for(auto &p : v){
-        int r = p.first, c = p.second;
-        if(st.count({r+1, c}) || st.count({r-1, c}) || st.count({r, c+1}) || st.count({r, c-1}))
-            return false;
-    }
-    return true;
-}
 
 void solve(){
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> arr(n, vector<int>(m));
-    map<int, vector<pair<int,int>>> mpp;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            cin >> arr[i][j];
-            mpp[arr[i][j]].push_back({i,j});
-        }
+    int n;
+    cin >> n;
+    vec v(n);
+    rep(i, n){
+        cin >> v[i];
     }
-    int cnt=0, ans=0;
-    for(auto &it: mpp){
-        int cost = f(it.second) ? 1 : 2;
-        cnt += cost;
-        ans = max(ans, cost);
+    priority_queue<int, vec, greater<int>> pq;
+    for(int i = 0; i < n; i++){
+        pq.push(v[i]);
     }
-    cout << cnt - ans << endl;
+    int ans = 0;
+    while(pq.size() > 1){
+        int a = pq.top();
+        pq.pop();
+        int b = pq.top();
+        pq.pop();
+        ans += a + b;
+        pq.push(a + b - 1);
+    }
+    cout << pq.top() << endl;
 }
+
 
 int32_t main(){
     fast
