@@ -36,43 +36,24 @@ const int N=2e5+5;
 
 
 void solve(){
-
-    int x, n, m;
-    cin >> x >> n >> m;
-
-    int a = x;
-    int b = x;
-
-    int n1 = n;
-    int m1 = m;
-
-    while(a > 1 && m) {
-        a = (a + 1)/2;
-        m--;
-
-    }
-
-    while(n) {
-        a = a/2;
-        n--;
-        if(a == 0) break;
-    }
-
-    while(n1) {
-        b = b/2;
-        n1--;
-        if(b == 0) break;
-    }
-
-    while(b > 1 && m1) {
-        b = (b + 1)/2;
-        m1--;
-    }
-
-    cout << min(a, b) << " " << max(a, b) << endl;
-
-
+    int x, y, a;
+    cin >> x >> y >> a;
     
+    
+    a = 2*a + 1;  
+    
+    int total = (a + 1) / 2;  
+    
+    
+    int pairs = (total - 1) / (x + y);
+    int remaining = total - pairs * (x + y);
+    
+    if (remaining <= x) {
+        cout << "NO" << endl;
+    } 
+    else{
+        cout << "YES" << endl;
+    }
 }
 
 

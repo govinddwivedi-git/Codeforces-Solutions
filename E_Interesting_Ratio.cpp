@@ -34,44 +34,29 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
+vector<bool> sieve(int n) {
+    vector<bool> isPrime(n + 1, true);
+    isPrime[0] = isPrime[1] = false;
+
+    for (int i = 2; i * i <= n; i++) {
+        if (isPrime[i]) {
+            for (int j = i * i; j <= n; j += i) {
+                isPrime[j] = false;
+            }
+        }
+    }
+    return isPrime;
+}
 
 void solve(){
-
-    int x, n, m;
-    cin >> x >> n >> m;
-
-    int a = x;
-    int b = x;
-
-    int n1 = n;
-    int m1 = m;
-
-    while(a > 1 && m) {
-        a = (a + 1)/2;
-        m--;
-
+    int n;
+    cin >> n;
+    vector<bool> a = sieve(n);
+    int ans = 0;
+    for(int i = 2; i <= n; i++){
+        if(a[i]) ans += (n / i);
     }
-
-    while(n) {
-        a = a/2;
-        n--;
-        if(a == 0) break;
-    }
-
-    while(n1) {
-        b = b/2;
-        n1--;
-        if(b == 0) break;
-    }
-
-    while(b > 1 && m1) {
-        b = (b + 1)/2;
-        m1--;
-    }
-
-    cout << min(a, b) << " " << max(a, b) << endl;
-
-
+    cout << ans << endl;
     
 }
 

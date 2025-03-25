@@ -36,41 +36,40 @@ const int N=2e5+5;
 
 
 void solve(){
+    int n;
+    cin >> n;
+    int k;
+    cin >> k;
+    string s;
+    cin >> s;
 
-    int x, n, m;
-    cin >> x >> n >> m;
+    string t = s;
+    reverse(all(t));
 
-    int a = x;
-    int b = x;
-
-    int n1 = n;
-    int m1 = m;
-
-    while(a > 1 && m) {
-        a = (a + 1)/2;
-        m--;
-
+    if(s < t) {
+        cout << "YES" << endl;
+        return;
     }
 
-    while(n) {
-        a = a/2;
-        n--;
-        if(a == 0) break;
+    else {
+        if( k == 0 )
+            cout << "NO" << endl;
+        else {
+            set<char> st;
+            for(int i = 0; i<n;i++) {
+                st.insert(s[i]);
+            }
+            if(st.size()==1) {
+                cout << "NO" << endl;
+                return;
+            }
+            else {
+                cout << "YES" << endl;
+                return;
+            }
+        }
+            
     }
-
-    while(n1) {
-        b = b/2;
-        n1--;
-        if(b == 0) break;
-    }
-
-    while(b > 1 && m1) {
-        b = (b + 1)/2;
-        m1--;
-    }
-
-    cout << min(a, b) << " " << max(a, b) << endl;
-
 
     
 }
@@ -90,3 +89,4 @@ int32_t main(){
     }
     return 0;
 }
+

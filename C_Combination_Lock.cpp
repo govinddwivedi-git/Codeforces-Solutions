@@ -36,43 +36,19 @@ const int N=2e5+5;
 
 
 void solve(){
-
-    int x, n, m;
-    cin >> x >> n >> m;
-
-    int a = x;
-    int b = x;
-
-    int n1 = n;
-    int m1 = m;
-
-    while(a > 1 && m) {
-        a = (a + 1)/2;
-        m--;
-
+    int n;
+    cin >> n;
+    if((n & 1 )== 0) {
+        cout << -1 << endl;
+        return;
     }
-
-    while(n) {
-        a = a/2;
-        n--;
-        if(a == 0) break;
+    for(int i = 1; i <= n; i+=2){
+        cout << i << " ";
     }
-
-    while(n1) {
-        b = b/2;
-        n1--;
-        if(b == 0) break;
+    for(int i = 2; i <= n; i+=2){
+        cout << i << " ";
     }
-
-    while(b > 1 && m1) {
-        b = (b + 1)/2;
-        m1--;
-    }
-
-    cout << min(a, b) << " " << max(a, b) << endl;
-
-
-    
+    cout << endl;
 }
 
 

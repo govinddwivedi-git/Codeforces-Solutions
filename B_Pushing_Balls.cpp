@@ -36,43 +36,48 @@ const int N=2e5+5;
 
 
 void solve(){
+    int n, m;
+    cin >> n >> m;
+    vector<vector<char>> a(n, vector<char>(m));
 
-    int x, n, m;
-    cin >> x >> n >> m;
-
-    int a = x;
-    int b = x;
-
-    int n1 = n;
-    int m1 = m;
-
-    while(a > 1 && m) {
-        a = (a + 1)/2;
-        m--;
-
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            cin >> a[i][j];
+        }
     }
 
-    while(n) {
-        a = a/2;
-        n--;
-        if(a == 0) break;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(a[i][j] == '1'){
+                int p = i - 1;
+                int q = j - 1;
+            
+                bool b1 = true;
+                bool b2 = true;
+                while(p >= 0){
+                    if(a[p--][j] == '0'){
+                       b1 = false;
+                          break;
+                    }
+                }
+                while(q >= 0){
+                    if(a[i][q--] == '0'){
+                        b2 = false;
+                        break;
+                    }
+                }
+
+                if(!b1 && !b2){
+                    cout << "NO" << endl;
+                    return;
+                }
+            }
+        }
     }
 
-    while(n1) {
-        b = b/2;
-        n1--;
-        if(b == 0) break;
-    }
-
-    while(b > 1 && m1) {
-        b = (b + 1)/2;
-        m1--;
-    }
-
-    cout << min(a, b) << " " << max(a, b) << endl;
+    cout << "YES" << endl;
 
 
-    
 }
 
 

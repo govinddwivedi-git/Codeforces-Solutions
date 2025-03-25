@@ -36,43 +36,25 @@ const int N=2e5+5;
 
 
 void solve(){
-
-    int x, n, m;
-    cin >> x >> n >> m;
-
-    int a = x;
-    int b = x;
-
-    int n1 = n;
-    int m1 = m;
-
-    while(a > 1 && m) {
-        a = (a + 1)/2;
-        m--;
-
+    int n;
+    cin >> n;
+    vec v(n);
+    for(int i = 0; i < n; i++) {
+        cin >> v[i];
     }
-
-    while(n) {
-        a = a/2;
-        n--;
-        if(a == 0) break;
-    }
-
-    while(n1) {
-        b = b/2;
-        n1--;
-        if(b == 0) break;
-    }
-
-    while(b > 1 && m1) {
-        b = (b + 1)/2;
-        m1--;
-    }
-
-    cout << min(a, b) << " " << max(a, b) << endl;
-
-
     
+    map<int,int> mp {{0,3}, {1,1}, {2,2}, {3,1}, {5,1}};
+    for(int i = 0; i < n; i++) {
+        if(mp.find(v[i]) != mp.end()) {
+            mp[v[i]]--;
+            if(mp[v[i]] == 0) mp.erase(v[i]);
+        }
+        if(mp.empty()) {
+            cout << i + 1 << endl;
+            return;
+        }
+    }
+    cout << 0 << endl;
 }
 
 
