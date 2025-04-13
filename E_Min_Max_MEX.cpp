@@ -34,26 +34,59 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
+const int maxi = 1000001;
+vector<int> v(maxi, 0);  
+int cnt = 0;            
 
-void solve(){
-    int x,y;
-    cin >> x >> y;
-
-    if(x == y) {
-        cout << -1 << endl;
-        return;
+bool check(vector<int>& a, int k, int x, vector<int>& v, int& cnt) {
+    int n = a.size();
+    int curr = 0; 
+    int c = 0;    
+    while(curr < n && c < k) {
+        cnt++;       
+        int missing = x;  
+        bool found = false;
+        
+        for(int r = curr; r < n; r++) {
+            if(a[r] < x && v[a[r]] != cnt) {
+                v[a[r]] = cnt; 
+                missing--;
+            }
+            if(missing == 0) {  
+                c++;
+                curr = r + 1;
+                found = true;
+                break;
+            }
+        }
+        if(!found) break; 
     }
-    int maxi = max(x,y);
-
-    int p = 1;
-    while(p <= maxi) {
-        p *= 2;
-    }
-    int ans =  p - maxi;
-    cout << ans << endl;
-    // cout << ((ans+x) & (ans+y)) << endl;
+    
+    return c >= k;
 }
 
+void solve(){
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
+    }
+    
+    
+    int left = 0, right = maxi;
+    while (left < right) {
+        int mid = left + (right - left + 1) / 2;
+        if(check(a, k, mid, v, cnt)) {  
+            left = mid;
+        } 
+        else {
+            right = mid - 1;
+        }
+    }
+    
+    cout << right << endl;
+}
 
 int32_t main(){
     fast

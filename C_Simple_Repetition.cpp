@@ -34,26 +34,35 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-
-void solve(){
-    int x,y;
-    cin >> x >> y;
-
-    if(x == y) {
-        cout << -1 << endl;
-        return;
+bool isPrime(int x) {
+    if (x <= 1) return false;
+    if (x == 2) return true;
+    if (x % 2 == 0) return false;
+    for(int i = 3; i <= sqrt(x); i += 2) {
+        if (x % i == 0) return false;
     }
-    int maxi = max(x,y);
-
-    int p = 1;
-    while(p <= maxi) {
-        p *= 2;
-    }
-    int ans =  p - maxi;
-    cout << ans << endl;
-    // cout << ((ans+x) & (ans+y)) << endl;
+    return true;
 }
 
+void solve(){
+    int x, k;
+    cin >> x >> k;
+    
+    if(k == 1) {
+        if(isPrime(x)) {
+            cout << "YES" << endl;
+        } 
+        else {
+            cout << "NO" << endl;
+        }
+    }
+    else if(k == 2 && x == 1) {
+        cout << "YES" << endl;
+    }
+    else{
+        cout << "NO" << endl;
+    }
+}
 
 int32_t main(){
     fast

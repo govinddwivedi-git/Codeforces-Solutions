@@ -36,22 +36,45 @@ const int N=2e5+5;
 
 
 void solve(){
-    int x,y;
-    cin >> x >> y;
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    vector<int> prefix(n);
+    vector<int> suffix(n);
 
-    if(x == y) {
-        cout << -1 << endl;
-        return;
+    for(int i = 0; i < n; i++) {
+        if(s[i] == '0') {
+            prefix[i] = 1;
+        }
     }
-    int maxi = max(x,y);
+    for(int i = 1; i < n; i++) {
+        prefix[i] += prefix[i - 1];
+    }
 
-    int p = 1;
-    while(p <= maxi) {
-        p *= 2;
+    for(int i = n - 1; i >= 0; i--) {
+        if(s[i] == '1') {
+            suffix[i] = 1;
+        }
     }
-    int ans =  p - maxi;
-    cout << ans << endl;
-    // cout << ((ans+x) & (ans+y)) << endl;
+    for(int i = n - 2; i >= 0; i--) {
+        suffix[i] += suffix[i + 1];
+    }
+
+    double ans = 1e18;
+    int ind = -1;
+    for (int i = 0; i <= n; i++) {
+        bool l = (i == 0) || ( prefix[i - 1] >= (i + 1) / 2 );
+        bool r = (i == n) || ( suffix[i] >= ((n - i) + 1) / 2 );
+        if(l && r) {
+            double diff = fabs(i - (n / 2.0));
+            if(diff < ans) {
+                ans = diff;
+                ind = i;
+            }
+        }
+    }
+    cout << ind << endl;
 }
 
 

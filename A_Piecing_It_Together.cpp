@@ -36,22 +36,9 @@ const int N=2e5+5;
 
 
 void solve(){
-    int x,y;
-    cin >> x >> y;
-
-    if(x == y) {
-        cout << -1 << endl;
-        return;
-    }
-    int maxi = max(x,y);
-
-    int p = 1;
-    while(p <= maxi) {
-        p *= 2;
-    }
-    int ans =  p - maxi;
-    cout << ans << endl;
-    // cout << ((ans+x) & (ans+y)) << endl;
+    // int n;
+    // cin >> n;
+    cout << "puzzling\n";
 }
 
 
@@ -59,7 +46,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         
         

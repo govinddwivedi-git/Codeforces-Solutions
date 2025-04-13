@@ -36,22 +36,16 @@ const int N=2e5+5;
 
 
 void solve(){
-    int x,y;
-    cin >> x >> y;
-
-    if(x == y) {
-        cout << -1 << endl;
-        return;
+    int n;
+    cin >> n;
+    
+  
+    if (n % 2 == 1) {
+        cout << "YES" << endl;
+    } 
+    else {
+        cout << "NO" << endl;
     }
-    int maxi = max(x,y);
-
-    int p = 1;
-    while(p <= maxi) {
-        p *= 2;
-    }
-    int ans =  p - maxi;
-    cout << ans << endl;
-    // cout << ((ans+x) & (ans+y)) << endl;
 }
 
 
