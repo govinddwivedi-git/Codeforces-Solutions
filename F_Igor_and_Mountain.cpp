@@ -28,12 +28,11 @@ using pii=pair<int,int>;
 using mapi=map<int,int>;
 using si=set<int>;
 
-const int mod = 1e9+7;
+const int mod = 998244353; 
 
 // Global Constants
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
-
 
 void solve(){
     int n, m, d;
@@ -91,9 +90,9 @@ void solve(){
         }
     }
     
+    
     cout << dp[0][m-1] << endl; 
 }
-
 
 int32_t main(){
     fast
@@ -101,11 +100,7 @@ int32_t main(){
     int t = 1;
     cin >> t;
     while(t--){
-        
-        
         solve();
-
-
     }
     return 0;
 }
