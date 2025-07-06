@@ -36,35 +36,38 @@ const int N=2e5+5;
 
 
 void solve(){
-    int n, m;
-    cin >> n >> m;
-    vector<int> a(n), b(m);
-    for(int i = 0; i < n; i++) cin>>a[i];
-
-    for(int j = 0;j < m; j++) cin >> b[j];
-    
-    if(b[0]-a[0] < a[0]){
-        a[0] = b[0] - a[0];
-    }
-    for(int i=1;i<n;i++){
-        if(a[i] < a[i-1]){
-            if(b[0] - a[i] >= a[i-1]){
-                a[i] = b[0] - a[i];
-            }
-            else{
-                cout << "NO" << endl;
-                return;
-            }
-            continue;
-        }
-        if(b[0]-a[i]<a[i] && b[0]-a[i]>=a[i-1]){
-            a[i]=b[0]-a[i];
-        }
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    if(n * (n + 1) / 2 < m || m < n){
+        cout << -1 << endl;
+        return;
     }
 
-    cout << "YES" << endl;
+    vector<bool> num(n+1,0);
+        int sum = n*(n+1)/2;
+        for(int i = n; i > 1 && sum != m; i-- ) {
+            if( sum - i + 1 >= m ) {
+                num[i] = 1;
+                sum = sum - i + 1;
+            }
+        } 
+        int root = n;
+        while( num[root] == 1 ) {
+            --root;
+        }
+        cout << root << '\n';
+        for( int i = n; i > 0; --i ) {
+            if( i == root ) continue;
+            if( num[i] == 0 ) {
+                cout << root << ' ' << i << '\n';
+            } 
+            else {
+                cout << "1 " << i << '\n';
+            }
+        }
 }
-
 
 
 int32_t main(){
@@ -79,6 +82,5 @@ int32_t main(){
 
 
     }
-   
     return 0;
 }
