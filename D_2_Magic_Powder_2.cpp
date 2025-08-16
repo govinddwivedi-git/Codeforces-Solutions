@@ -36,27 +36,41 @@ const int N=2e5+5;
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vector<int> red(n);
-    for(auto &val : red) cin >> val;
-    int m; cin >> m;
-    vector<int> blue(m);
-    for(auto &val : blue) cin >> val;
+    int n, k;
+    cin >> n >> k;
 
-    int maxRed = 0, sumRed = 0;
-    for(int i = 0; i < n; ++i) {
-        sumRed += red[i];
-        maxRed = max(maxRed, sumRed);
+    vector<int> req(n), has(n);
+    for(auto &i : req) cin >> i;
+    for(auto &i : has) cin >> i;
+
+    int start = 0;
+    int end = k + *max_element(has.begin(), has.end());;
+    int ans = 0;
+    while(start <= end) {
+        int mid = start + (end - start) / 2;
+        int extra = 0;
+        bool flag = false;
+        for(int i = 0; i < n; i++) {
+            if(req[i] != 0 && mid > LLONG_MAX / req[i]) {
+                flag = true;
+                break;
+            }
+            int need = mid * req[i];
+            int ex = max(0ll, need - has[i]);
+            if(extra > LLONG_MAX - ex) {
+                flag = true;
+                break;
+            }
+            extra += ex;
+        }
+
+        if(extra <= k && !flag) {
+            ans = mid;
+            start = mid + 1;
+        }
+        else end = mid - 1;
     }
-
-    int maxBlue = 0, sumBlue = 0;
-    for(int i = 0; i < m; ++i) {
-        sumBlue += blue[i];
-        maxBlue = max(maxBlue, sumBlue);
-    }
-
-    cout << max(0LL, maxRed + maxBlue) << endl;
+    cout << ans << endl;
 }
 
 
@@ -64,7 +78,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
     while(t--){
         
         
@@ -73,4 +86,5 @@ int32_t main(){
 
     }
     return 0;
+
 }

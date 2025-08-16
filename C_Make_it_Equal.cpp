@@ -35,28 +35,42 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-void solve(){
+void solve() {
     int n;
     cin >> n;
-    vector<int> red(n);
-    for(auto &val : red) cin >> val;
-    int m; cin >> m;
-    vector<int> blue(m);
-    for(auto &val : blue) cin >> val;
+    int k;
+    cin >> k;
+    vector<int> s(n), t(n);
+    for(int i = 0; i < n; i++) cin >> s[i];
+    for(int i = 0; i < n; i++) cin >> t[i];
 
-    int maxRed = 0, sumRed = 0;
-    for(int i = 0; i < n; ++i) {
-        sumRed += red[i];
-        maxRed = max(maxRed, sumRed);
+    map<int, int> fs, ft;
+    for(int i = 0; i < n; i++) {
+        fs[s[i] % k]++;
+        ft[t[i] % k]++;
     }
-
-    int maxBlue = 0, sumBlue = 0;
-    for(int i = 0; i < m; ++i) {
-        sumBlue += blue[i];
-        maxBlue = max(maxBlue, sumBlue);
+    
+    for(auto p : fs) {
+        int r = p.first;
+        int c = p.second;
+        int neg = (-r % k + k) % k; 
+        if(r == neg) {
+            if(fs[r] != ft[r]) {
+                cout << "NO\n";
+                return;
+            }
+        } 
+        else {
+            int sums = fs[r] + fs[neg];
+            int sumt = ft[r] + ft[neg];
+            if (sums != sumt) {
+                cout << "NO\n";
+                return;
+            }
+        }
     }
-
-    cout << max(0LL, maxRed + maxBlue) << endl;
+    cout << "YES\n";
+   
 }
 
 

@@ -35,25 +35,35 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
+int f(vector<vector<int>> &dp, int i, int j, string &s, string &t) {
+    if(j < 0) return 1;
+    if(i < 0 ) return 0;
+
+    if(dp[i][j] != -1) return dp[i][j];
+    int notTake = f(dp, i - 1, j, s, t);
+    int take = 0;
+    if(s[i] == t[j]) {
+        take = f(dp, i - 1, j - 1, s, t);
+    }
+    
+    return dp[i][j] = take + notTake;
+
+}
+
 
 int32_t main(){
     fast
 
     string s;
     cin >> s;
-    int size = s.length();
-    int cnt = 0;
-    for(int i=0; i<size-1; i++){
-        if(s[i]=='Q'){
-            for(int j =i+1; j < size; j++){
-                if(s[j]=='Q'){
-                    for(int k=i+1; k<j; k++){
-                        if(s[k]=='A') cnt++;
-                    }
-                }
-            }
-        }
-    }
-    cout << cnt << endl;
+    string t = "QAQ";
+    int n = s.size();
+    int m = t.size();
+
+    vector<vector<int>> dp(n, vector<int>(m, -1));
+    int ans = f(dp, n - 1, m - 1, s, t);
+    cout << ans << endl;
+
+
     return 0;
 }

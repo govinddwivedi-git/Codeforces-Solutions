@@ -38,25 +38,18 @@ const int N=2e5+5;
 void solve(){
     int n;
     cin >> n;
-    vector<int> red(n);
-    for(auto &val : red) cin >> val;
-    int m; cin >> m;
-    vector<int> blue(m);
-    for(auto &val : blue) cin >> val;
-
-    int maxRed = 0, sumRed = 0;
-    for(int i = 0; i < n; ++i) {
-        sumRed += red[i];
-        maxRed = max(maxRed, sumRed);
+    vector<int> arr(n);
+    for(auto &i : arr) cin >> i;
+    vector<int> ans(n);
+    int val = 0;
+    for(int i = n - 1; i >= 0; i--) {
+        val--;
+        val = max(val, arr[i]);
+        if(val) ans[i] = 1;
     }
 
-    int maxBlue = 0, sumBlue = 0;
-    for(int i = 0; i < m; ++i) {
-        sumBlue += blue[i];
-        maxBlue = max(maxBlue, sumBlue);
-    }
-
-    cout << max(0LL, maxRed + maxBlue) << endl;
+    for(int i = 0; i < n; i++) cout << ans[i] << " ";
+    cout << endl;
 }
 
 

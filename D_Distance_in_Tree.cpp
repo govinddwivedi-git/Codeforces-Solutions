@@ -34,29 +34,47 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
+void func(vector<vector<int>> &dp, int node, int parent, vector<vector<int>> &adj , int k, int &ans) {
+
+    dp[node][0] = 1;
+    for(auto &v  : adj[node]) {
+        if(parent == v) continue;
+        func(dp, v, node, adj, k, ans);
+
+        
+        for(int i = 0; i < k; i++) {
+            ans += (dp[node][i] * dp[v][k - i - 1]);
+        }
+
+        for(int i = 1; i <= k; i++) {
+            dp[node][i] += dp[v][i - 1];
+        }
+        
+    }
+
+    
+
+}
 
 void solve(){
-    int n;
-    cin >> n;
-    vector<int> red(n);
-    for(auto &val : red) cin >> val;
-    int m; cin >> m;
-    vector<int> blue(m);
-    for(auto &val : blue) cin >> val;
+    int n, k;
+    cin >> n >> k;
 
-    int maxRed = 0, sumRed = 0;
-    for(int i = 0; i < n; ++i) {
-        sumRed += red[i];
-        maxRed = max(maxRed, sumRed);
+    vector<vector<int>> dp(n + 1, vector<int> (k + 1));
+    vector<vector<int>> adj(n + 1);
+
+    for(int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
 
-    int maxBlue = 0, sumBlue = 0;
-    for(int i = 0; i < m; ++i) {
-        sumBlue += blue[i];
-        maxBlue = max(maxBlue, sumBlue);
-    }
+    int ans = 0;
+    func(dp, 1, -1, adj, k, ans);
 
-    cout << max(0LL, maxRed + maxBlue) << endl;
+    cout << ans << endl;
+    
 }
 
 
@@ -64,7 +82,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
     while(t--){
         
         
