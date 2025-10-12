@@ -34,49 +34,51 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-
-int solution(vector<string> resources, int conversionRate) {
-    long long countA = 0;
-    long long countB = 0;
-
-    for (const string& res : resources) {
-        if (res == "a") {
-            countA++;
-        } else {
-            countB++;
+int findUpperBound(vector<pair<int,int>> &arr, int k) {
+    int n = arr.size();
+    int start = 0, end = n - 1;
+    int ans = n;
+    while(start <= end) {
+        int mid = start + (end - start) / 2;
+        if(arr[mid].first <= k) start = mid + 1;
+        else {
+            ans = mid;
+            end = mid - 1;
         }
     }
 
-    int cycles = 0;
-    while (true) {
-        if (countB >= conversionRate) {
-            // Option 1
-            countB -= conversionRate;
-            countA++;
-            cycles++;
-        } else if (countA > 0) {
-            // Option 2
-            countA--;
-            countB++;
-            cycles++;
-        } else {
-            // Option 3: Halt
-            break;
-        }
-    }
-    return cycles;
+    return ans;
+
 }
 
 void solve(){
     int n;
     cin >> n;
-    vector<string> arr(n);
-    for(int i = 0; i < n; i++) cin >> arr[i];
-    int r;
-    cin >> r;
-    int ans = solution(arr, r);
-    cout << ans;
-    
+    vector<int> arr(n);
+    for(auto &i : arr) cin >> i;
+
+    vector<pair<int,int>> v;
+    for(int i = 0; i < n; i++) {
+        if(arr[i] < i + 1) {
+            v.push_back({arr[i], i + 1});
+        }
+    }
+
+    sort(all(v));
+
+    // for(auto &i : v) {
+    //     cout << i.first << " " << i.second << endl;
+    // } 
+
+    int ans = 0;
+    for(int i = 0; i < v.size(); i++) {
+        int ind = findUpperBound(v, v[i].second);
+        int cnt = v.size() - ind;
+        ans += cnt;
+    }
+
+    cout << ans << endl;
+    // cout << "\n";
 }
 
 
@@ -84,7 +86,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         
         

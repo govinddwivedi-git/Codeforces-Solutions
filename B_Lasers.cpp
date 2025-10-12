@@ -35,48 +35,25 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-int solution(vector<string> resources, int conversionRate) {
-    long long countA = 0;
-    long long countB = 0;
-
-    for (const string& res : resources) {
-        if (res == "a") {
-            countA++;
-        } else {
-            countB++;
-        }
-    }
-
-    int cycles = 0;
-    while (true) {
-        if (countB >= conversionRate) {
-            // Option 1
-            countB -= conversionRate;
-            countA++;
-            cycles++;
-        } else if (countA > 0) {
-            // Option 2
-            countA--;
-            countB++;
-            cycles++;
-        } else {
-            // Option 3: Halt
-            break;
-        }
-    }
-    return cycles;
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    vector<string> arr(n);
-    for(int i = 0; i < n; i++) cin >> arr[i];
-    int r;
-    cin >> r;
-    int ans = solution(arr, r);
-    cout << ans;
+    int n, m, x, y;
+    cin >> n >> m >> x >> y;
+    vector<int> a(n), b(m);
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    for(int i = 0; i < m; i++) {
+        cin >> b[i];
+    }
+    int cnt = 0;
+    for(int i = 0; i < n; i++) {
+        if(a[i] < y) cnt++;
+    }
+    for(int i = 0; i < m; i++) {
+        if(b[i] < x) cnt++;
+    }
     
+    cout << cnt << endl;
 }
 
 
@@ -84,7 +61,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         
         

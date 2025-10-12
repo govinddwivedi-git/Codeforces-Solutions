@@ -35,48 +35,42 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-int solution(vector<string> resources, int conversionRate) {
-    long long countA = 0;
-    long long countB = 0;
-
-    for (const string& res : resources) {
-        if (res == "a") {
-            countA++;
-        } else {
-            countB++;
-        }
-    }
-
-    int cycles = 0;
-    while (true) {
-        if (countB >= conversionRate) {
-            // Option 1
-            countB -= conversionRate;
-            countA++;
-            cycles++;
-        } else if (countA > 0) {
-            // Option 2
-            countA--;
-            countB++;
-            cycles++;
-        } else {
-            // Option 3: Halt
-            break;
-        }
-    }
-    return cycles;
-}
-
 void solve(){
     int n;
     cin >> n;
-    vector<string> arr(n);
-    for(int i = 0; i < n; i++) cin >> arr[i];
-    int r;
-    cin >> r;
-    int ans = solution(arr, r);
-    cout << ans;
-    
+    int q;
+    cin >> q;
+    vector<int> arr(n);
+    for(auto &i : arr) cin >> i;
+    unordered_map<int, int> mpp;
+    int sum = accumulate(all(arr), 0ll);
+    bool changed = false;
+    for(int i = 0; i < q; i++) {
+        int t;
+        cin >> t;
+        if(t == 1) {
+            int ind, x;
+            cin >> ind >> x;
+            ind--;
+            if(mpp.count(ind)) sum -= mpp[ind];
+            else if(changed) sum -= arr[0];
+            else sum -= arr[ind];
+            sum += x;
+            mpp[ind] = x;
+            cout << sum << endl;
+        }
+        else {
+            int x;
+            cin >> x;
+            sum = n * x;
+            arr[0] = x; 
+            mpp.clear();
+            changed = true;
+            cout << sum << endl;
+        }
+    }
+
+
 }
 
 

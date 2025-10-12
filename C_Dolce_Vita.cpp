@@ -35,48 +35,41 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-int solution(vector<string> resources, int conversionRate) {
-    long long countA = 0;
-    long long countB = 0;
-
-    for (const string& res : resources) {
-        if (res == "a") {
-            countA++;
-        } else {
-            countB++;
-        }
-    }
-
-    int cycles = 0;
-    while (true) {
-        if (countB >= conversionRate) {
-            // Option 1
-            countB -= conversionRate;
-            countA++;
-            cycles++;
-        } else if (countA > 0) {
-            // Option 2
-            countA--;
-            countB++;
-            cycles++;
-        } else {
-            // Option 3: Halt
-            break;
-        }
-    }
-    return cycles;
-}
-
 void solve(){
     int n;
     cin >> n;
-    vector<string> arr(n);
-    for(int i = 0; i < n; i++) cin >> arr[i];
-    int r;
-    cin >> r;
-    int ans = solution(arr, r);
-    cout << ans;
+    int x;
+    cin >> x;
+    vec arr(n);
+    for(auto &i : arr) cin >> i;
+    sort(all(arr));
     
+    int total_packs = 0;
+    int prefix_sum = 0;
+    for(int i = 0; i < n; ++i) {
+        prefix_sum += arr[i];
+        if (prefix_sum > x) {
+            break;
+        }
+        // Number of shops we are buying from is i + 1
+        // On day d, cost is prefix_sum + (i+1)*(d-1) 
+        // We need prefix_sum + (i+1)*(d-1) <= x
+        // (i+1)*(d-1) <= x - prefix_sum
+        // d <= (x - prefix_sum) / (i+1) + 1
+        // Number of days we can do this is from d=0 to d_max.
+        int num_days = (x - prefix_sum) / (i + 1) + 1;
+        total_packs += num_days;
+
+
+        // For a fixed prefix of k = i+1 shops:
+        // On day 1, total cost = pref[i]
+        // On day 2, cost = pref[i] + k
+        // On day 3, cost = pref[i] + 2*k
+        // …
+        // On day d, cost = pref[i] + (d-1)*k
+    }
+
+    cout << total_packs << endl;
 }
 
 
@@ -84,7 +77,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         
         

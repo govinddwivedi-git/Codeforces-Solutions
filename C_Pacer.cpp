@@ -35,47 +35,42 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-int solution(vector<string> resources, int conversionRate) {
-    long long countA = 0;
-    long long countB = 0;
-
-    for (const string& res : resources) {
-        if (res == "a") {
-            countA++;
-        } else {
-            countB++;
-        }
-    }
-
-    int cycles = 0;
-    while (true) {
-        if (countB >= conversionRate) {
-            // Option 1
-            countB -= conversionRate;
-            countA++;
-            cycles++;
-        } else if (countA > 0) {
-            // Option 2
-            countA--;
-            countB++;
-            cycles++;
-        } else {
-            // Option 3: Halt
-            break;
-        }
-    }
-    return cycles;
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    vector<string> arr(n);
-    for(int i = 0; i < n; i++) cin >> arr[i];
-    int r;
-    cin >> r;
-    int ans = solution(arr, r);
-    cout << ans;
+    int n, m;
+    cin >> n >> m;
+    vector<pii> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin >> arr[i].ff >> arr[i].ss;
+    }
+
+    int start = 0;
+    int last = 0;
+    int cnt = 0;
+    for(int i = 0; i < n; i++) {
+        int req = arr[i].second;
+        if(start != req) {
+            int round = (arr[i].first - last);
+            if(round & 1)
+                cnt += round;
+            else cnt += (round - 1);
+        }
+        else {
+            int round = arr[i].first - last;
+            if(!(round & 1))
+                cnt += round;
+            else cnt += (round - 1);
+        }
+        last = arr[i].first;
+        start = arr[i].second;
+    }
+
+    if(last != m) {
+        cnt += (m - last);
+    }
+
+    cout << cnt << endl;
+
+
     
 }
 
@@ -84,7 +79,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         
         
